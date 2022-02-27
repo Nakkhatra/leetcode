@@ -36,9 +36,14 @@ def isPalindrome(x: int) -> bool:
 
 def isPalindromeWithString(x: int) -> bool:
     s = str(x)
-    revS = ""
-    for i in range(len(s) - 1, -1, -1):
-        revS += s[i]
+
+    # revS = ""
+    # for i in range(len(s) - 1, -1, -1):
+    #     revS += s[i]
+
+    revS = s[
+        ::-1
+    ]  # NOTE: s[::-1] slicing with -1 step is a much faster method to reverse a list/ string
 
     if s == revS:
         return True
