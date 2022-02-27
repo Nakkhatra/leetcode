@@ -1,64 +1,68 @@
-#NOTE: This is still not solved. Will finish this later.
-
-s = "42"
-
-# NOTE: examples:
-# " 0-241" -> 0
-# "+-42" -> 0
-# "++42" -> 0
-# "00092" -> 92
-# " 0.42" -> 0
-# "   -36 word" -> -36
-
-
 def myAtoi(s: str) -> int:
-    neg = 1
+    digCount = 0
+    mul = 1
     ans = 0
+    symCount = 0
     count = 0
-    c = 0
+
     for char in s:
-        if count > 1:
-            break
-        if c < 1:
-            if char == "+" or char == "-":
-                count += 1
-            if char == "+" or char == " ":
-                if ans == 0:
+        if digCount < 1:
+            if char == " ":
+                if symCount < 1:
                     continue
                 else:
+                    return 0
+
+            elif char == "+" or char == "-":
+                symCount += 1
+                if symCount >= 2:
                     break
-            elif char == "-":
-                if ans == 0:
-                    neg = -1
-                else:
-                    break
+                if char == "-":
+                    mul = -1
+                continue
 
-        try:
-            ans = ans * 10 + int(char)
-            c += 1
-        except:
-            break
-    ans *= neg
+            elif char == ".":
+                return 0
 
-    if ans < (-2) ** 31:
-        ans = (-2) ** 31
-    elif ans > 2 ** 31 - 1:
-        ans = 2 ** 31 - 1
+            elif ord(char) >= 48 and ord(char) <= 57:
+                ans = 10 * ans + int(char)
+                digCount += 1
 
-    return ans
+            else:
+                break
+
+        else:
+            if (
+                ord(char) >= 48 and ord(char) <= 57
+            ):  # NOTE: ord() provides the unicode number for the character, for "0" it is 48 and for "9" it is 57
+                ans = 10 * ans + int(char)
+
+            else:
+                break
+
+    ans *= mul
+
+    if ans >= 2 ** 31 - 1:
+        return 2 ** 31 - 1
+
+    elif ans <= (-2) ** 31:
+        return (-2) ** 31
+
+    else:
+        return ans
 
 
-print(myAtoi(s))
-
-
-# Testcases:
-
-# "42"
-# ".42"
-# "  9-21474836948hello0"
-# "4 2"
-# "4+2"
-# "5.2"
-# "6++41"
-# " ++42"
-# "000-92"
+print(myAtoi("42"))
+print(myAtoi("  42"))
+print(myAtoi("+42"))
+print(myAtoi("-42"))
+print(myAtoi("++42"))
+print(myAtoi("--42"))
+print(myAtoi("+-42"))
+print(myAtoi("  .42"))
+print(myAtoi("+.42"))
+print(myAtoi(" - 42"))
+print(myAtoi("999999999999999999999999999999999999999"))
+print(myAtoi("hello 54 69"))
+print(myAtoi("54 words"))
+print(myAtoi("  +b12102370352"))
