@@ -49,13 +49,13 @@ def maxAreatry(height):
     return Max
 
 
-def maxArea(height):
+def maxAreatry2(height):
     sHeight = sorted(set(height))[::-1]
     Max = 0
     area = 0
 
     for i, h in enumerate(sHeight):
-        if len(height) * h >= Max:
+        if (len(height) - 1) * h >= Max:
             candidates = [i for i, x in enumerate(height) if x == h]
             if i == 0:
                 if len(candidates) > 1:
@@ -97,8 +97,46 @@ def maxArea(height):
 
     return Max
 
+# NOTE: Below is the most efficient method======================================================================
 
-print(maxArea([3, 6, 5, 8, 1]))
-print(maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7]))
-print(maxArea([4, 2, 1, 3, 1, 8, 6, 2, 5, 4, 8, 3, 7]))
-print(maxArea([1, 2, 1]))
+def maxArea(height):
+    s = 0
+    Max = 0
+    start = 0
+    end = len(height) - 1
+    
+    for _ in height:
+        
+        if height[start] >= height[end]:
+            if height[end] <= s:
+                end -= 1
+                continue
+            
+            s = height[end]
+            area = s * (end - start)
+            end -= 1
+            
+        else:
+            if height[start] <= s:
+                start += 1
+                continue
+            
+            s = height[start]
+            area = s * (end - start)
+            start += 1
+            
+        if area > Max:
+            Max = area
+        
+    return Max
+        
+        
+        
+        
+    
+
+# print(maxArea([3, 6, 5, 8, 1]))
+# print(maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7]))
+# print(maxArea([4, 2, 1, 3, 1, 8, 6, 2, 5, 4, 8, 3, 7]))
+# print(maxArea([1, 2, 1]))
+print(maxArea([1, 2, 3, 4, 5, 25, 24, 3, 4]))
